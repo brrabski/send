@@ -1,0 +1,91 @@
+- {{{{[[embed]]: ((XGcRt62DC))}}}}
+- Concept
+    - First things first, let's clear the mental space of preconceptions. Wet contract terms and conditions are ambiguous, amorphous, dynamic, and often flexible. They do not lend themselves to easy encoding into smart contract rules, so let's forget about them for now and instead focus on what can be encoded.
+    - All business arrangements rely on agreeing to rights and obligations. This is done with the use of documents (i.e. contracts, bills of lading, invoices, etc.). As shipments are made, contracts are executed, and business processes proceed, rights and obligations are created, transferred, changed, or destroyed.
+    - Send Protocol provides primitives that allow formulation of wet contract endpoints in the form of rights and obligations, and defines a finite set of rules that allow transitions for these endpoints that are generalized across all wet contract types.
+    - ![](https://firebasestorage.googleapis.com/v0/b/firescript-577a2.appspot.com/o/imgs%2Fapp%2FSnailpace%2FURfrSGMA-R.png?alt=media&token=4390e0a8-ff96-4cc1-bbfe-3aaf82e2b119)
+    - Send Protocol contract endpoints are NFTs that can be held in a wallet and transferred according to rule templates that correspond to the closed set of legal actions that are possible on any wet contract: Assignment, Novation, Renegotiation, Termination.
+    - The Send Protocol framework tokenises contracts using the following primitive concepts. These concepts are a closed list of what kind of operations are permissible on any contract.
+        - 1. Assignment
+            - Idea: Rights that are defined in a contract can be unilaterally assigned by the holder of those rights. An assignment does not require the permission of the obligated party.
+            - Consequence: Rights Tokens are held in a wallet and can be transferred to another wallet unilaterally. The Rights Token is tied to its corresponding Obligation Token, which remains in the same place after a Rights Token has been transferred.
+            - DeFi angle: The Rights Token is an asset-backed NFT and may directly be used in DeFi, as it will act like any other NFT.
+        - 2. Novation
+            - Idea: Obligations that are defined in a contract require a novation to change the obligated party. A novation requires the agreement of the rights holder and the obligated party. 
+            - Consequence: Obligation Tokens are held in a wallet, but cannot be transferred unilaterally. A transfer must be initiated by the Obligation Token holder wallet and authorized by the Rights Token holder wallet.
+            - DeFi: The Obligation Token requires more robust functionality to integrate into DeFi, but represents 
+        - 3. Renegotiation of Terms
+            - Idea: At any time the parties to a contract may renegotiate the terms and all sides need to agree to renegotiate.
+            - Consequence: The parties to a wet contract jointly hold the Terms Token, which is an NFT that represents a wet contract document, which may or may not have structure.
+        - 4. Termination
+            - Idea: A contract may be terminated once all the rights that belong to it are satisfied. The satisfaction of rights may be either:
+                - are a unilateral decision by the rights holder, or
+                - satisfaction of an obligation, if such a rule has been scripted.
+    - The four types of action on a contract operate on rights and obligations, the two types of tokens defined by Send Protocol. A Rights Token (RT) represents rights that can change hands via assignment, while an Obligation Token (OT) represents an obligation that can change hands via novation.
+    - The terms of the contract can be represented by a document whose hash that ties together OT/RT pairs and may be updated via a renegotiation of terms. The precise terms and conditions of the contract remain outside the scope of Send Protocol, and that is its strength. Ts&Cs are ambiguous for most contracts and the task of translating them to smart contract automations is best left to Send Protocol users, who are experts in their specific use cases.
+    - Consider the following setup for a normal invoiced sale
+        - Wallets (Identities)
+            - Buyer
+            - Seller
+            - Payment processor (optional)
+        - Document content
+            - Invoice data object - The object is stored entirely off-chain and is human readable. It may be a PDF with a scan of a physical document and contains sufficient information for the parties to make their decisions.
+            - The invoice can contain a link to the contract on which it is based. This contract will also be a document with its own rights tokens.
+        - Rights tokens
+            - Receivable token
+                - Defined by who receives the payment for the invoice. Through holding the Receivable token, the seller has the right to mark the receivable as completed once the payment has been made. Initially payments may not be made on-chain and so this could be a unilateral operation by the owner or rights to change status can be handled by a payment processor that is trusted by the owner.
+                - The Seller may choose to sell the Receivable to another party, in which case they __Send__ the party the invoice and the Receivable token. Legally, this is an __Assignment__.
+            - Liability token
+                - The liability is the Buyer's obligation to pay the invoice. The Buyer's liability cannot be unilaterally transferred by the Buyer. It has to be agreed to by the owner of the receivable. Transfer of this token is therefore legally a __Novation__.
+            - Deactivate document token
+                - Once issued, the invoice can be corrected by a credit note that cancels the amount or a debit note that increases the amount due. However, due to tax law, an invoice cannot be cancelled. Therefore if a seller wishes to cancel a delivery and the liability, he may cancel the receivable and 
+            - Deactivate document token
+                - When a document is created, it may need to be updated. In this case the a new version of the document is created and the old version changes status to inactive. 
+        - 
+    - [[Examples]]
+- Contract Lifecycle
+    - Overview
+        - A contract goes through three phases during its lifetime:
+            - Initiation - During this phase all ROT pairs are defined and any relationships between them also established.
+            - Period in force - During the contract period in force, the obligations may be realized and rights may become invoked and satisfied.
+            - Termination - Once all Rights Tokens associated with a contract are satisfied or destroyed, the contract is considered terminated.
+        - Realization of obligations or rights, like payments, may be scripted in smart contract code that is external to the Send protocol. The goal of the scripts are to serve as an adjudicator on the satisfaction of obligations or rights. The more such scripted adjudicators, the more automated the contract lifecycle becomes. However, it is perfectly possible to have a Send Protocol contract without scripted actions, where all obligation rights or transfers are handled manually by wallet owners.
+    - Initiation process
+        - Setup of a wet contract on Send starts with choosing what the tokens should represent. This means that the sides of the contract must examine the terms and decide, which endpoints they would like to tokenise.
+        - Any business transaction involves the exchange of a product or service for a consideration that goes in the opposite direction. The transfer of a product is represented by one pair of RO tokens, while the consideration is represented by another RO pair.
+        - Transactions may involve multiple products, services, tranches, time periods, or phases. Each such discrete unit should correspond to a consideration going the other way. The consideration could be in cash or in kind, but for the purpose of this discussion we will use cash.
+        - The sides must choose discrete product or service units to tokenise. For each unit a RT and an OT should be created. One side receives the RT and the other the matching OT. Each pair are inextricably linked.
+        - The RT and the OT must also be correctly parametrised, so that they are subject to to the Send rules. By default Send allows the RT to be transferred unilaterally by the holding wallet, while the OT requires the transaction to be signed by both wallets holding the pair.
+        - To begin with each RT pair receives the inactive status. This is to signify, when the obligation becomes due. By default, the product/service pair should be activated to initiate the transaction, while the consideration/payment pair should remain inactive. 
+        - During process initiation the parties may connect OT to an oracle that will determine, if the OT has been realised.
+        - The parties might choose to automate approval of the OT transfer using the Send API. 
+        - Finally, a RO pair needs a set of terms and conditions to which the parties have agreed; the contract itself. To this effect the parties submit an NFT hash of a document that represents the terms and conditions that bind them. This NFT is held by both parties' wallets and remains in force until all RO pairs are destroyed. To aid interpretation, the contract should explicitly name the endpoints that are tokenised in RO pairs.
+        - A contract NFT may be updated by both sides to the hash of a new agreement.
+        - The end result of the initiation of a Send agreement is at least the following set:
+            - An RO pair representing the Obligation to render a service or product coupled with the Right to receive it.
+            - An RO pair representing the Obligation to pay for the rendered service or product and the Right to be paid.
+            - The Contract terms that govern the above RO pairs.
+    - Period in force
+        - While the sides of the agreement conduct the transaction the RO pairs can have state to signal the state of the transaction.
+    - Termination
+        - There are two ways of satisfying a RO pair. Either the RT is destroyed, or the OT is destroyed. Either way, both tokens are annihilated.
+        - Calls to the destroy function of each token in the RT pair may be written up in a smart contract, so that once an obligation is realised its OT destroy function is called. 
+        - The most basic kind of automation that should be provided by Send protocol is the consideration (payment), since it can be native to the chain. To realise the consideration the OT holding wallet must transfer a defined token amount to the RT holder by calling the Send Consideration function with the required amount.
+- Contract Structure
+    - Users of Send Protocol decide how many OTs and RTs pairs exist and define them at contract signing. The RTs and OTs then are subject to the rules of Assignment, Novation, Renegotiation, and Termination.
+    - Each RT has a corresponding OT and the terms of a contract determine, how many RT/OT pairs there are. The users of the protocol create the token pairs during contract initiation.
+    - During initiation of a Send Protocol relationship the following elements are created:
+        - A document that records the terms and conditions of the arrangement is hashed and the contract hash is created. No sophisticated support for document management is planned at this time except to allow the document hash to be replaced by agreement of both parties.
+        - For each right-obligation pair that the parties want to tokenise two NFTs are created. These NFTs are hashes to a term that describes the right and obligation. The Rights Token is placed in the rights holder's wallet, and the Obligation Token is placed in the obligated party's wallet.
+        - 
+- [[Sketches]]
+    - ![](https://firebasestorage.googleapis.com/v0/b/firescript-577a2.appspot.com/o/imgs%2Fapp%2FSnailpace%2FYQ034bY9vv.jpeg?alt=media&token=360003e1-b048-4e0a-b7a8-bcde23683663)
+- [[Rights Token]]
+    - The Rights Token is a non-fungible token that represents the rights of a party resulting from a contract. Once created, an RT can be either transferred or burned. The rights on an RT are defined by
+        - Assigning it to a reference right in a contract. This is a link with the contract from which it stems and is agreed by the parties that sign the contract. This reference is used to interpret the token right or obligation by a reader.
+        - Defining who holds the right or obligation by placing the RT in their wallet. There is no way to define decisively what is a right or obligation, so a rights or obligation token looks essentially the same except for...
+        - Defining who is allowed to __Send__ or __Burn__ the RT. In the case of a rights token, like receipt of payment, the token permission is solely on the token holder, while for an obligation the permission to transfer is requires the consent of all parties to the contract.
+        - Rights and Obligation tokens exist in pairs. An obligation token will always be accompanied by a right to receive the obligation.
+        - [[January 4th, 2021]] 
+- Contract Initiation
+    - During `c

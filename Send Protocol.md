@@ -51,8 +51,6 @@
                 - Once issued, the invoice can be corrected by a credit note that cancels the amount or a debit note that increases the amount due. However, due to tax law, an invoice cannot be cancelled. Therefore if a seller wishes to cancel a delivery and the liability, he may cancel the receivable and 
             - Deactivate document token
                 - When a document is created, it may need to be updated. In this case the a new version of the document is created and the old version changes status to inactive. 
-        - 
-    - [[Examples]]
 - Contract Lifecycle
     - Overview
         - A contract goes through three phases during its lifetime:
@@ -76,7 +74,7 @@
             - An RO pair representing the Obligation to pay for the rendered service or product and the Right to be paid.
             - The Contract terms that govern the above RO pairs.
     - Period in force
-        - While the sides of the agreement conduct the transaction the RO pairs can have state to signal the state of the transaction.
+        - While the sides of the agreement conduct the transaction the RO pairs can have state to signal the state of the transaction. This idea is not yet developed.
     - Termination
         - There are two ways of satisfying a RO pair. Either the RT is destroyed, or the OT is destroyed. Either way, both tokens are annihilated.
         - Calls to the destroy function of each token in the RT pair may be written up in a smart contract, so that once an obligation is realised its OT destroy function is called. 
@@ -86,16 +84,4 @@
     - Each RT has a corresponding OT and the terms of a contract determine, how many RT/OT pairs there are. The users of the protocol create the token pairs during contract initiation.
     - During initiation of a Send Protocol relationship the following elements are created:
         - A document that records the terms and conditions of the arrangement is hashed and the contract hash is created. No sophisticated support for document management is planned at this time except to allow the document hash to be replaced by agreement of both parties.
-        - For each right-obligation pair that the parties want to tokenise two NFTs are created. These NFTs are hashes to a term that describes the right and obligation. The Rights Token is placed in the rights holder's wallet, and the Obligation Token is placed in the obligated party's wallet.
-        - 
-- [[Sketches]]
-    - ![](https://firebasestorage.googleapis.com/v0/b/firescript-577a2.appspot.com/o/imgs%2Fapp%2FSnailpace%2FYQ034bY9vv.jpeg?alt=media&token=360003e1-b048-4e0a-b7a8-bcde23683663)
-- [[Rights Token]]
-    - The Rights Token is a non-fungible token that represents the rights of a party resulting from a contract. Once created, an RT can be either transferred or burned. The rights on an RT are defined by
-        - Assigning it to a reference right in a contract. This is a link with the contract from which it stems and is agreed by the parties that sign the contract. This reference is used to interpret the token right or obligation by a reader.
-        - Defining who holds the right or obligation by placing the RT in their wallet. There is no way to define decisively what is a right or obligation, so a rights or obligation token looks essentially the same except for...
-        - Defining who is allowed to __Send__ or __Burn__ the RT. In the case of a rights token, like receipt of payment, the token permission is solely on the token holder, while for an obligation the permission to transfer is requires the consent of all parties to the contract.
-        - Rights and Obligation tokens exist in pairs. An obligation token will always be accompanied by a right to receive the obligation.
-        - [[January 4th, 2021]] 
-- Contract Initiation
-    - During `c
+        - For each right-obligation pair that the parties want to tokenise two NFTs are created. These NFTs are hashes to a term that describes the right and obligation. The Rights Token is placed in the rights holder's wallet, and the Obligation Token is placed in the obligated party's wallet. 

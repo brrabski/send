@@ -1,3 +1,5 @@
+Copyright 2023 @brrabski
+
 - **Introduction**
     - You might have noticed that contracts signed between entities or individuals, wet contracts, do not convert into smart contracts easily. In fact, with the strict rules governing how smart contracts function, it's not even clear this is feasible in general, or even desirable (!!). Do parties to a contract usually want the terms to be excecuted unconditionally and without delay? Often the answer is an emphatic "No!"
     - Send Protocol is a generalized framework for contracts to enter the blockchain (or indeed digital) space that takes an orthogonal approach to the intuitive one focused on codifying terms and conditions.
